@@ -15,23 +15,27 @@ st.title("📈 Goldpreis Prognose-Dashboard (Live & Interaktiv)")
 st.write("Dieses Dashboard nutzt Machine Learning (XGBoost & SVR), um den Goldpreis von morgen vorherzusagen.")
 
 # ==========================================
+# ==========================================
 # 1. DATEN LADEN (LOKAL & LIVE)
 # ==========================================
 @st.cache_data
 def lade_lokale_daten():
     # Lädt die hochgeladene CSV-Datei
     df = pd.read_csv("gold_price_cleaned.csv")
-    df['Date'] = pd.to_datetime(df['Date'])
-    df = df.sort_values('Date')
+    # 'Datum' statt 'Date' verwenden, da dies so in deiner CSV steht
+    df['Datum'] = pd.to_datetime(df['Datum'])
+    df = df.sort_values('Datum')
     return df
 
 try:
     df_lokal = lade_lokale_daten()
-    letzter_preis_lokal = df_lokal['Close'].iloc[-1]
+    # 'GLD_Goldpreis' statt 'Close' verwenden, da deine Spalte so heißt
+    letzter_preis_lokal = df_lokal['GLD_Goldpreis'].iloc[-1]
     st.sidebar.success("Lokale CSV-Daten erfolgreich geladen!")
 except Exception as e:
     st.sidebar.error(f"Fehler beim Laden der CSV: {e}")
     df_lokal = None
+
 
 # Live-Daten von Yahoo Finance abrufen (GC=F ist Gold)
 live_daten_geladen = False
